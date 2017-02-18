@@ -1,0 +1,32 @@
+{
+  "name": "path-alexa-skill",
+  "version": "1.0.0",
+  "description": "Alexa skill to find out next train on PATH service from your location to a particular destination",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/falseno9/path-alexa-skill.git"
+  },
+  "author": "Shweta Sabne <shwetasabne@gmail.com> (http://www.shwetasabne.com)",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/falseno9/path-alexa-skill/issues"
+  },
+  "homepage": "https://github.com/falseno9/path-alexa-skill#readme",
+  "devDependencies": {
+    "lodash": "^4.17.4"
+  },
+  "dependencies": {
+    "eslint": "^3.15.0",
+    "eslint-config-airbnb": "^14.1.0",
+    "eslint-plugin-import": "^2.2.0",
+    "eslint-plugin-json": "^1.2.0",
+    "eslint-plugin-jsx-a11y": "^4.0.0",
+    "eslint-plugin-react": "^6.10.0",
+    "moment": "^2.17.1",
+    "moment-timezone": "^0.5.11"
+  }
+}
