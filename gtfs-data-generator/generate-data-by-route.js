@@ -59,8 +59,20 @@ MongoClient.connect(url)
     return getTripsInfoPerRoute("860", db);
   })
   .then(output => {
-    console.log(JSON.stringify(output, null, 2));
+    //console.log(JSON.stringify(output, null, 2));
+    let finalOutput = {};
+    finalOutput.up = [];
+    finalOutput.down = [];
+    output.forEach(res => {
+      if(res.direction === 'World Trade Center') {
+        finalOutput.down.push(res.stops);
+      } else {
+        finalOutput.up.push(res.stops);
+      }
+    });
+    console.log(JSON.stringify(finalOutput, null, 2));
     // Process the data
+    db.close();
   })
   .catch(e => {
    // console.log(e)
