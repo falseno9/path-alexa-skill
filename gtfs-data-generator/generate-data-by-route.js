@@ -49,17 +49,16 @@ function getTripsInfoPerRoute(routeId, db) {
         tripsInfo[i].stops = stop;
         i++;
       });
+      db.close();
       return tripsInfo;
     })
 }
 
 MongoClient.connect(url)
   .then(db => {
-    //console.log(db)
     return getTripsInfoPerRoute("860", db);
   })
   .then(output => {
-    //console.log(JSON.stringify(output, null, 2));
     let finalOutput = {};
     finalOutput.up = [];
     finalOutput.down = [];
@@ -71,8 +70,6 @@ MongoClient.connect(url)
       }
     });
     console.log(JSON.stringify(finalOutput, null, 2));
-    // Process the data
-    db.close();
   })
   .catch(e => {
    // console.log(e)
