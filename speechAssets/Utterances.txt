@@ -1,0 +1,5 @@
+PathGuideIntent When is the next train from {Source} to {Destination}
+PathGuideIntent Next train from {Source} to {Destination}
+PathGuideIntent Train from {Source} to {Destination}
+PathGuideIntent {Source} to {Destination}
+PathGuideIntent {Source} {Destination}
