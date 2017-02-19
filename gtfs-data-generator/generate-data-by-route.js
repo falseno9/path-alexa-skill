@@ -4,6 +4,8 @@ var MongoClient = require('mongodb').MongoClient
 var url = 'mongodb://localhost:27017/gtfs';
 var fs = require('fs');
 var Promise = require('bluebird');
+var stop_metadata = require('../src/data/stop_metadata');
+var lodash = require('lodash');
 
 function getStopTimesPerTrip(tripId, db) {
   const stopsInfo = [];
@@ -16,7 +18,7 @@ function getStopTimesPerTrip(tripId, db) {
     .then(allStops => {
       allStops.forEach(stop => {
         const temp = {};
-        temp[stop.stop_id] = stop.arrival_time;
+        temp[stop_metadata[stop.stop_id]] = stop.arrival_time;
         stopsInfo.push(temp);
       });
       return stopsInfo;
@@ -49,31 +51,44 @@ function getTripsInfoPerRoute(routeId, db) {
         tripsInfo[i].stops = stop;
         i++;
       });
+      db.close();
       return tripsInfo;
     })
 }
 
 MongoClient.connect(url)
   .then(db => {
-    //console.log(db)
-    return getTripsInfoPerRoute("860", db);
+    return getTripsInfoPerRoute(process.env.ROUTE_ENV, db);
   })
   .then(output => {
-    //console.log(JSON.stringify(output, null, 2));
     let finalOutput = {};
+    finalOutput.stops = [];
     finalOutput.up = [];
     finalOutput.down = [];
     output.forEach(res => {
+      var stops = 
+        lodash.flatten(
+          lodash.reduce(res.stops, function(result, value, key){ result.push(Object.keys(value)); return result;}, [])
+        );
+      lodash.merge(finalOutput.stops, stops);
       if(res.direction === 'World Trade Center') {
         finalOutput.down.push(res.stops);
       } else {
         finalOutput.up.push(res.stops);
       }
     });
-    console.log(JSON.stringify(finalOutput, null, 2));
-    // Process the data
-    db.close();
+    // If filename is specified write to the file, else console log
+    if (process.env.FILENAME) {
+      fs.writeFile(process.env.FILENAME, JSON.stringify(finalOutput, null, 2), function(err) {
+        if(err) {
+            return console.log(err);
+        }
+        console.log("The file was saved!");
+      });
+    } else {
+      console.log(JSON.stringify(finalOutput, null, 2));
+    }
   })
   .catch(e => {
-   // console.log(e)
+    console.log(e)
   })
