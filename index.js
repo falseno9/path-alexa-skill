@@ -24,8 +24,9 @@ const handlers = {
         const sourceStation = this.event.request.intent.slots.Source.value.toLowerCase();
         const destStation = this.event.request.intent.slots.Destination.value.toLowerCase();
         const self = this;
-        return transitController.getDataFromAPI(sourceStation, destStation)
-            .then(function(output){
+        return transitController.getNextTrain(sourceStation, destStation)
+            .then(function(output) {
+                console.log(JSON.stringify(output, null, 2));
                 self.attributes['speechOutput'] = output.data;
                 self.attributes['repromptSpeech'] = `reprompt ${output.data}`;
                 const cardTitle = `${languageString.DISPLAY_CARD_TITLE}, ${languageString.SKILL_NAME}`;
