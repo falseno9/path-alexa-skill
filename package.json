@@ -31,7 +31,10 @@
     "eslint-plugin-json": "^1.2.0",
     "eslint-plugin-jsx-a11y": "^4.0.0",
     "eslint-plugin-react": "^6.10.0",
+    "handlebars": "^4.0.6",
     "moment": "^2.17.1",
-    "moment-timezone": "^0.5.11"
+    "moment-timezone": "^0.5.11",
+    "supertest": "^3.0.0",
+    "supertest-as-promised": "^4.0.2"
   }
 }
