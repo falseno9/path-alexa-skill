@@ -2,7 +2,7 @@
 
 const routeMetadata = require('../resources/route_metadata');
 const _ = require('lodash');
-const moment = require('moment');
+const moment = require('moment-timezone');
 
 function findNextTime(source, destination) {
   console.log(`Finding next time from ${source} to ${destination}`);
@@ -33,7 +33,9 @@ function processRoute(source, destination, routeObject) {
 
 function getRouteTime(source, destination, routeStopDetails, thisTime) {
   const formatString = 'HH:mm:ss';
-  const currTime = moment(thisTime).format(formatString) || moment().format(formatString);
+  const timezone = 'America/New_York';
+
+  const currTime = moment(thisTime).tz(timezone).format(formatString) || moment().tz(timezone).format(formatString);
   console.log(`Current time is ${currTime}`);
   const sortedRouteStopDetails = _.sortBy(routeStopDetails, (o) => {
     return o[source];
