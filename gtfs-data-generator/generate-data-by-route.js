@@ -73,13 +73,17 @@ MongoClient.connect(url)
           )
         );
       lodash.merge(finalOutput.stops, stops);
-      if(res.direction === 'World Trade Center') {
+      if(res.direction === '33rd via Hoboken') {
         finalOutput.down.push(res.stops);
       } else {
         finalOutput.up.push(res.stops);
       }
-      finalOutput.up = lodash.uniq(lodash.flatten(finalOutput.up));
-      finalOutput.down = lodash.uniq(lodash.flatten(finalOutput.down));
+
+      const sortedUp = lodash.uniqBy(lodash.flattenDeep(finalOutput.up), '33rd Street');
+      const sortedDown = lodash.uniqBy(lodash.flattenDeep(finalOutput.down), '33rd Street');
+
+      finalOutput.up = sortedUp;
+      finalOutput.down = sortedDown;
     });
     // If filename is specified write to the file, else console log
     if (process.env.FILENAME) {
