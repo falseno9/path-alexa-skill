@@ -1,6 +1,7 @@
 'use strict';
 
 const Alexa = require('alexa-sdk');
+const pathController = require('./controllers/pathController');
 
 exports.handler = function(event, context, callback) {
     const alexa = Alexa.handler(event, context);
@@ -22,7 +23,8 @@ const handlers = {
         const sourceStation = this.event.request.intent.slots.Source.value.toLowerCase();
         const destStation = this.event.request.intent.slots.Destination.value.toLowerCase();
 
-        const output = `You have requested trains from ${sourceStation} to ${destStation}`;
+        const nextTrain = pathController.findNextTime(sourceStation, destStation);
+        const output = `The next train from ${sourceStation} to ${destStation} is at ${nextTrain.hours} hours and ${nextTrain.minutes} minutes`;
         this.attributes['speechOutput'] = output;
         this.attributes['repromptSpeech'] = `reprompt ${output}`;
         const cardTitle = `${languageString.DISPLAY_CARD_TITLE}, ${languageString.SKILL_NAME}`;

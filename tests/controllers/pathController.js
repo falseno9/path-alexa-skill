@@ -24,7 +24,8 @@ describe('pathController', () => {
           thisTime);
 
       expect(output).to.deep.equal({
-        time: '20:24:00',
+        hours: '20',
+        minutes: '24',
         isToday: true
       })
     });
@@ -38,7 +39,8 @@ describe('pathController', () => {
           thisTime);
 
       expect(output).to.deep.equal({
-        time: '06:17:00',
+        hours: '06',
+        minutes: '17',
         isToday: false
       })
     });

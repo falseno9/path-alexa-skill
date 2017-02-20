@@ -5,7 +5,7 @@ const _ = require('lodash');
 const moment = require('moment');
 
 function findNextTime(source, destination) {
-  const routeFound = lodash.filter(test,
+  const routeFound = _.filter(routeMetadata,
     (o) => {
       return _.includes(o.route_stops, source) && _.includes(o.route_stops, destination)
     });
@@ -37,10 +37,14 @@ function getRouteTime(source, destination, routeStopDetails, thisTime) {
 
   const returnObject = {};
   if (timeObject.length !== 0) {
-    returnObject.time = timeObject[0][source];
+    let splitTime = _.split(timeObject[0][source], ':', 2);
+    returnObject.hours = splitTime[0];
+    returnObject.minutes = splitTime[1];
     returnObject.isToday = true;
   } else {
-    returnObject.time = sortedRouteStopDetails[0][source];
+    let splitTime = _.split(sortedRouteStopDetails[0][source], ':', 2);
+    returnObject.hours = splitTime[0];
+    returnObject.minutes = splitTime[1];
     returnObject.isToday = false;
   }
 
@@ -48,5 +52,6 @@ function getRouteTime(source, destination, routeStopDetails, thisTime) {
 };
 
 module.exports = {
-  getRouteTime
+  getRouteTime,
+  findNextTime
 }
