@@ -14,16 +14,18 @@ const url = 'https://maps.googleapis.com';
 const path = '/maps/api/directions/json';
 
 function getDataFromAPI(source, destination, departureTime, key) {
+  const query = {
+    origin: source,
+    destination: destination,
+    //departureTime: departureTime,
+    mode: 'transit',
+    transit_mode: 'rail',
+    key:  API_KEY   
+  };
+  console.log(`Requesting GAPI to get data for: ${JSON.stringify(query, null, 2)}`);
   return request(url)
     .get(path)
-    .query({
-      origin: source,
-      destination: destination,
-      //departureTime: departureTime,
-      mode: 'transit',
-      transit_mode: 'rail',
-      key:  API_KEY
-    })
+    .query(query)
     .expect(200)
     .then(response => {
       console.log(response.body)
@@ -54,6 +56,7 @@ function processData(data) {
 
 function getNextTrain(source, destination) {
   const departureTime = moment.valueOf();
+  console.log(`Retrieving data from ${source} to ${destination}`);
   return getDataFromAPI(source, destination, departureTime)
     .then(result => {
       if (!result) {
@@ -92,7 +95,7 @@ function getNextTrain(source, destination) {
 }
 
 module.exports = {
+  getDataFromAPI,
   getNextTrain,
-  processData,
-  getDataFromAPI
+  processData
 }
