@@ -23,13 +23,13 @@ const handlers = {
     'PathGuideIntent': function () {
         const sourceStation = this.event.request.intent.slots.Source.value.toLowerCase();
         const destStation = this.event.request.intent.slots.Destination.value.toLowerCase();
-        
+        const self = this;
         return transitController.getDataFromAPI(sourceStation, destStation)
             .then(function(output){
-                this.attributes['speechOutput'] = output.data;
-                this.attributes['repromptSpeech'] = `reprompt ${output.data}`;
+                self.attributes['speechOutput'] = output.data;
+                self.attributes['repromptSpeech'] = `reprompt ${output.data}`;
                 const cardTitle = `${languageString.DISPLAY_CARD_TITLE}, ${languageString.SKILL_NAME}`;
-                this.emit(':tellWithCard', output.data, cardTitle, output.data);
+                self.emit(':tellWithCard', output.data, cardTitle, output.data);
         });
        // const nextTrain = pathController.findNextTime(sourceStation, destStation);
        // const output = `The next train from ${sourceStation} to ${destStation} is at ${nextTrain.hours} hours and ${nextTrain.minutes} minutes`;
