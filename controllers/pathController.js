@@ -5,9 +5,9 @@ const _ = require('lodash');
 const moment = require('moment');
 
 function findNextTime(source, destination) {
-  const routeFound = _.filter(routeMetadata,
+  const routeFound = _.find(routeMetadata,
     (o) => {
-      return _.includes(o.route_stops, source) && _.includes(o.route_stops, destination)
+      return (_.includes(o.route_stops, source) && _.includes(o.route_stops, destination));
     });
 
   // Direct path found
@@ -17,7 +17,7 @@ function findNextTime(source, destination) {
 };
 
 function processRoute(source, destination, routeObject) {
-  const routeStopDetails = require(`../resources/${routeFound.route_name}`);
+  const routeStopDetails = require(`../resources/${routeObject.route_name}`);
 
   return _.indexOf(routeObject.route_stops, source) < _.indexOf(routeObject.route_stops, destination) ?
     getRouteTime(source, destination, routeStopDetails.down) :

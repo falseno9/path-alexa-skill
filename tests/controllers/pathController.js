@@ -7,7 +7,10 @@ const routeStopDetails = require('../../resources/route_860');
 
 describe('pathController', () => {
   describe('#findNextTime', () => {
-
+    it('should return corret data', () => {
+      const output = pathController.findNextTime('Newport', 'Exchange Place');
+      expect(output).to.have.all.keys('hours', 'minutes', 'isToday');
+    });
   });
 
   describe('#processRoute', () => {
