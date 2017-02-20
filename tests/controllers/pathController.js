@@ -7,8 +7,8 @@ const routeStopDetails = require('../../resources/route_860');
 
 describe('pathController', () => {
   describe('#findNextTime', () => {
-    it('should return corret data', () => {
-      const output = pathController.findNextTime('Newport', 'Exchange Place');
+    it('should return correct data', () => {
+      const output = pathController.findNextTime('newport', 'exchange place');
       expect(output).to.have.all.keys('hours', 'minutes', 'isToday');
     });
   });
@@ -21,8 +21,8 @@ describe('pathController', () => {
     it('should return correct data for today', () => {
       const thisTime = new Date('2016-02-19 20:23:00');
       const output = pathController.getRouteTime(
-          'Newport', 
-          'Exchange Place',
+          'newport', 
+          'exchange place',
           routeStopDetails.down,
           thisTime);
 
@@ -36,8 +36,8 @@ describe('pathController', () => {
     it('should return correct data for tomorrow', () => {
       const thisTime = new Date('2016-02-19 23:59:00');
       const output = pathController.getRouteTime(
-          'Newport', 
-          'Exchange Place',
+          'newport', 
+          'exchange place',
           routeStopDetails.down,
           thisTime);
 

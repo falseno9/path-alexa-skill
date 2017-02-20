@@ -5,11 +5,14 @@ const _ = require('lodash');
 const moment = require('moment');
 
 function findNextTime(source, destination) {
+  console.log(`Finding next time from ${source} to ${destination}`);
+  console.log(`Route metadata: ${JSON.stringify(routeMetadata, null, 2)}`);
   const routeFound = _.find(routeMetadata,
     (o) => {
       return (_.includes(o.route_stops, source) && _.includes(o.route_stops, destination));
     });
 
+  console.log(`Route found: ${routeFound}`);
   // Direct path found
   if (routeFound.length !== 0) {
     return processRoute(source, destination, routeFound);

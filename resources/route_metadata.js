@@ -1,9 +1,9 @@
 module.exports = [{
   route_name: 'route_860',
   route_stops: [
-    'Hoboken',
-    'Newport',
-    'Exchange Place',
-    'World Trade Center'
+    'hoboken',
+    'newport',
+    'exchange place',
+    'world trade center'
   ]
 }];
