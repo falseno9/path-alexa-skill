@@ -4,7 +4,7 @@
   "description": "Alexa skill to find out next train on PATH service from your location to a particular destination",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha --recursive tests"
   },
   "repository": {
     "type": "git",
@@ -17,7 +17,9 @@
   },
   "homepage": "https://github.com/falseno9/path-alexa-skill#readme",
   "devDependencies": {
+    "chai": "^3.5.0",
     "lodash": "^4.17.4",
+    "mocha": "^3.2.0",
     "mongodb": "^2.2.24"
   },
   "dependencies": {

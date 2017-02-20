@@ -24,10 +24,14 @@ function processRoute(source, destination, routeObject) {
     getRouteTime(source, destination, routeStopDetails.up);
 };
 
-function getRouteTime(source, destination, routeStopDetails) {
-  const currTime = moment().format("HH:mm:ss");
-  routeStopDetails = _.sortBy(routeStopDetails, [routeStopDetails[source]]);
-  const timeObject = _.filter(routeStopDetails, (o) => {
+function getRouteTime(source, destination, routeStopDetails, thisTime) {
+  const formatString = 'HH:mm:ss';
+  const currTime = moment(thisTime).format(formatString) || moment().format(formatString);
+  const sortedRouteStopDetails = _.sortBy(routeStopDetails, (o) => {
+    return o[source];
+  });
+
+  const timeObject = _.filter(sortedRouteStopDetails, (o) => {
     return o[source] > currTime;
   });
 
@@ -36,9 +40,13 @@ function getRouteTime(source, destination, routeStopDetails) {
     returnObject.time = timeObject[0][source];
     returnObject.isToday = true;
   } else {
-    returnObject.time = routeStopDetails[0][source];
+    returnObject.time = sortedRouteStopDetails[0][source];
     returnObject.isToday = false;
   }
 
   return returnObject;
 };
+
+module.exports = {
+  getRouteTime
+}
