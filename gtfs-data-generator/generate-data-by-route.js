@@ -4,7 +4,7 @@ var MongoClient = require('mongodb').MongoClient
 var url = 'mongodb://localhost:27017/gtfs';
 var fs = require('fs');
 var Promise = require('bluebird');
-var stop_metadata = require('../src/data/stop_metadata');
+var stop_metadata = require('../resources/stop_metadata');
 var lodash = require('lodash');
 
 function getStopTimesPerTrip(tripId, db) {
@@ -16,8 +16,8 @@ function getStopTimesPerTrip(tripId, db) {
     })
     .toArray()
     .then(allStops => {
+      const temp = {};
       allStops.forEach(stop => {
-        const temp = {};
         temp[stop_metadata[stop.stop_id]] = stop.arrival_time;
         stopsInfo.push(temp);
       });
@@ -67,8 +67,10 @@ MongoClient.connect(url)
     finalOutput.down = [];
     output.forEach(res => {
       var stops = 
-        lodash.flatten(
-          lodash.reduce(res.stops, function(result, value, key){ result.push(Object.keys(value)); return result;}, [])
+        lodash.uniq(
+          lodash.flatten(
+            lodash.reduce(res.stops, function(result, value, key){ result.push(Object.keys(value)); return result;}, [])
+          )
         );
       lodash.merge(finalOutput.stops, stops);
       if(res.direction === 'World Trade Center') {
@@ -76,6 +78,8 @@ MongoClient.connect(url)
       } else {
         finalOutput.up.push(res.stops);
       }
+      finalOutput.up = lodash.uniq(lodash.flatten(finalOutput.up));
+      finalOutput.down = lodash.uniq(lodash.flatten(finalOutput.down));
     });
     // If filename is specified write to the file, else console log
     if (process.env.FILENAME) {
