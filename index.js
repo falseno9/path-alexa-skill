@@ -3,7 +3,7 @@
 const Alexa = require('alexa-sdk');
 const transitController = require('./controllers/transitInfo');
 
-exports.handler = function(event, context, callback) {
+exports.handler = function (event, context, callback) {
     const alexa = Alexa.handler(event, context);
     alexa.registerHandlers(handlers);
     alexa.execute();
@@ -24,13 +24,19 @@ const handlers = {
         const destStation = this.event.request.intent.slots.Destination.value.toLowerCase();
         const self = this;
         return transitController.getNextTrain(sourceStation, destStation)
-            .then(function(output) {
-                console.log(JSON.stringify(output, null, 2));
-                self.attributes['speechOutput'] = output.data;
-                self.attributes['repromptSpeech'] = `reprompt ${output.data}`;
-                const cardTitle = `${languageString.DISPLAY_CARD_TITLE}, ${languageString.SKILL_NAME}`;
+            .then(function (output) {
+                console.log(`API Response: ${JSON.stringify(output, null, 2)}`);
+
+                if (output.isError) {
+                    self.attributes['speechOutput'] = output.data;
+                    self.attributes['repromptSpeech'] = languageString.ITEM_NOT_FOUND_REPROMPT;
+                } else {
+                    self.attributes['speechOutput'] = output.data;
+                }
+                speechOutput += repromptSpeech;
+                const cardTitle = `Path Guide : Next train from ${sourceStation} to ${destStation}`;
                 self.emit(':tellWithCard', output.data, cardTitle, output.data);
-        });
+            });
     },
     'AMAZON.HelpIntent': function () {
         this.attributes['speechOutput'] = languageString.HELP_MESSAGE;
@@ -54,12 +60,10 @@ const handlers = {
 const languageString = {
     WELCOME_STRING: 'Welcome to the Path App',
     WELCOME_REPROMPT: 'For help, say help me',
-    DISPLAY_CARD_TITLE: '%s - Timings for %s train',
     SKILL_NAME: 'Path Guide',
     REPEAT_MESSAGE: 'Try saying repeat',
-    ITEM_NOT_FOUND: 'Train for %s',
     ITEM_NOT_FOUND_REPROMPT: 'What else can I help with?',
-    HELP_MESSAGE: 'You can ask questions such as ...Now, what can I help you with?',
-    HELP_REPROMPT: 'You can say things like ...Now, what can I help you with?',
+    HELP_MESSAGE: 'You can ask questions such as train from Grove Street to World Trade Center ...Now, what can I help you with?',
+    HELP_REPROMPT: 'You can say things like Hoboken to Thirty Third Street...Now, what can I help you with?',
     STOP_MESSAGE: 'Goodbye!'
 };
