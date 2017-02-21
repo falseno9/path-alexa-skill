@@ -1,7 +1,6 @@
 'use strict';
 
 const Alexa = require('alexa-sdk');
-const pathController = require('./controllers/pathController');
 const transitController = require('./controllers/transitInfo');
 
 exports.handler = function(event, context, callback) {
@@ -32,11 +31,6 @@ const handlers = {
                 const cardTitle = `${languageString.DISPLAY_CARD_TITLE}, ${languageString.SKILL_NAME}`;
                 self.emit(':tellWithCard', output.data, cardTitle, output.data);
         });
-       // const nextTrain = pathController.findNextTime(sourceStation, destStation);
-       // const output = `The next train from ${sourceStation} to ${destStation} is at ${nextTrain.hours} hours and ${nextTrain.minutes} minutes`;
-
-        //TODO : Business logic here
-
     },
     'AMAZON.HelpIntent': function () {
         this.attributes['speechOutput'] = languageString.HELP_MESSAGE;

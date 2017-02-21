@@ -5,7 +5,7 @@ const moment = require('moment');
 const lodash = require('lodash');
 const handlebars = require('handlebars');
 const API_KEY = process.env.API_KEY;
-//https://maps.googleapis.com/maps/api/directions/json?origin=Grove%20Street&destination=Journal%20Square&departure_time=1487624934&mode=transit&key=AIzaSyADkzYFW8FqLGZqKKnzGYnYzXCeZS0LHtE
+//https://maps.googleapis.com/maps/api/directions/json?origin=Grove%20Street&destination=Journal%20Square&departure_time=1487624934&mode=transit&key=key
 
 const responseTemplate = 'Take {{trainHeadSign}} at {{trainDepartureTime}} from {{source}} to {{destination}}';
 const template = handlebars.compile(responseTemplate);
