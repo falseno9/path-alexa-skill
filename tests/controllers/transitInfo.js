@@ -6,11 +6,11 @@ describe('transitInfo', () => {
   describe('#getNextTrain', () => {
     it.only('should work', () => {
      return transitInfo.getNextTrain(
-        'hoboken', 
-        'world trade center',
+        'harrison', 
+        'new port',
         process.env.API_KEY)
         .then(output => {
-          // console.log(output);
+          console.log(JSON.stringify(output, null, 2));
           expect(output.isError).to.be.false;
         });
     });

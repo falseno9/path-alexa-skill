@@ -54,28 +54,31 @@ function processData(data) {
   return response;
 }
 
-function getNextTrain(source, destination) {
+function getNextTrain(origSource, origDestination) {
   const departureTime = moment.valueOf();
-  console.log(`Retrieving data from ${source} to ${destination}`);
+  console.log(`Retrieving data from ${origSource} to ${origDestination}`);
+  // Append words 'path station' to source and destination for accurate results
+  const source = lodash.includes(origSource, 'path') ? origSource : `${origSource} path station`;
+  const destination = lodash.includes(origDestination, 'path') ? origDestination : `${origDestination} path station`;
   return getDataFromAPI(source, destination, departureTime)
     .then(result => {
       if (!result) {
         return {
           isError: true,
-          data: `Error obtaining PATH information from ${source} to ${destination}`
+          data: `Error obtaining PATH information from ${origSource} to ${origDestination}`
         };
       } else {
         if (result.status !== 'OK') {
           return {
             isError: true,
-            data: `Error obtaining PATH information from ${source} to ${destination}`
+            data: `Error obtaining PATH information from ${origSource} to ${origDestination}`
           };          
         } else {
           const response = processData(result);
           if (response.length == 0 ) {
             return {
               isError: true,
-              data: `Sorry we could retrieve the information requested`
+              data: `Path information not found for ${origSource} to ${origDestination}`
             };
           }
           else if (response.length > 1) {
