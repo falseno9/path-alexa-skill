@@ -28,7 +28,7 @@ const handlers = {
                 console.log(`API Response: ${JSON.stringify(output, null, 2)}`);
 
                 if (output.isError) {
-                    self.attributes['speechOutput'] = output.data;
+                    self.attributes['speechOutput'] = languageString.ERROR_MESSAGE;
                     self.attributes['repromptSpeech'] = languageString.ITEM_NOT_FOUND_REPROMPT;
                 } else {
                     self.attributes['speechOutput'] = output.data;
@@ -58,11 +58,12 @@ const handlers = {
 };
 
 const languageString = {
-    WELCOME_STRING: 'Welcome to the Path App',
+    WELCOME_STRING: 'Welcome to the Path Guide',
     WELCOME_REPROMPT: 'For help, say help me',
     SKILL_NAME: 'Path Guide',
     REPEAT_MESSAGE: 'Try saying repeat',
-    ITEM_NOT_FOUND_REPROMPT: 'What else can I help with?',
+    ERROR_MESSAGE : 'Sorry. The data was not found',
+    ITEM_NOT_FOUND_REPROMPT: 'Please try again',
     HELP_MESSAGE: 'You can ask questions such as train from Grove Street to World Trade Center ...Now, what can I help you with?',
     HELP_REPROMPT: 'You can say things like Hoboken to Thirty Third Street...Now, what can I help you with?',
     STOP_MESSAGE: 'Goodbye!'
