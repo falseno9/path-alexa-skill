@@ -1,6 +1,7 @@
 'use strict';
 
 const Alexa = require('alexa-sdk');
+const _ = require('lodash');
 const transitController = require('./controllers/transitInfo');
 
 exports.handler = function (event, context, callback) {
@@ -20,23 +21,30 @@ const handlers = {
         this.emit(':ask', this.attributes['speechOutput'], this.attributes['For instructions, say help me'])
     },
     'PathGuideIntent': function () {
-        const sourceStation = this.event.request.intent.slots.Source.value.toLowerCase();
-        const destStation = this.event.request.intent.slots.Destination.value.toLowerCase();
-        const self = this;
-        return transitController.getNextTrain(sourceStation, destStation)
-            .then(function (output) {
-                console.log(`API Response: ${JSON.stringify(output, null, 2)}`);
+        if (_.isUndefined(this.event.request.intent.slots.Source.value) ||
+            _.isUndefined(this.event.request.intent.slots.Destination.value)) {
+            const speechOutput = `${languageString.SOURCE_DEST_NOT_FOUND} ${languageString.ITEM_NOT_FOUND_REPROMPT}`;
+            this.emit(':ask', speechOutput, languageString.ITEM_NOT_FOUND_REPROMPT);
+        } else {
+            const sourceStation = this.event.request.intent.slots.Source.value.toLowerCase();
+            const destStation = this.event.request.intent.slots.Destination.value.toLowerCase();
+            const self = this;
+            return transitController.getNextTrain(sourceStation, destStation)
+                .then(function (output) {
+                    console.log(`API Response: ${JSON.stringify(output, null, 2)}`);
 
-                if (output.isError) {
-                    self.attributes['speechOutput'] = languageString.ERROR_MESSAGE;
-                    self.attributes['repromptSpeech'] = languageString.ITEM_NOT_FOUND_REPROMPT;
-                } else {
-                    self.attributes['speechOutput'] = output.data;
-                }
-                speechOutput += repromptSpeech;
-                const cardTitle = `Path Guide : Next train from ${sourceStation} to ${destStation}`;
-                self.emit(':tellWithCard', output.data, cardTitle, output.data);
-            });
+                    if (output.isError) {
+                        self.attributes['speechOutput'] = languageString.ERROR_MESSAGE;
+                        self.attributes['repromptSpeech'] = languageString.ITEM_NOT_FOUND_REPROMPT;
+                        const speechOutput = `${languageString.ERROR_MESSAGE}, ${languageString.ITEM_NOT_FOUND_REPROMPT}`;
+                        self.emit(':ask', speechOutput, languageString.ITEM_NOT_FOUND_REPROMPT);
+                    } else {
+                        self.attributes['speechOutput'] = output.data;
+                        const cardTitle = `Path Guide : Next train from ${sourceStation} to ${destStation}`;
+                        self.emit(':tellWithCard', output.data, cardTitle, output.data);
+                    }
+                });
+        }
     },
     'AMAZON.HelpIntent': function () {
         this.attributes['speechOutput'] = languageString.HELP_MESSAGE;
@@ -62,8 +70,9 @@ const languageString = {
     WELCOME_REPROMPT: 'For help, say help me',
     SKILL_NAME: 'Path Guide',
     REPEAT_MESSAGE: 'Try saying repeat',
-    ERROR_MESSAGE : 'Sorry. The data was not found',
+    ERROR_MESSAGE: 'Sorry. The data was not found',
     ITEM_NOT_FOUND_REPROMPT: 'Please try again',
+    SOURCE_DEST_NOT_FOUND: 'Either source or destination station was not provided.',
     HELP_MESSAGE: 'You can ask questions such as train from Grove Street to World Trade Center ...Now, what can I help you with?',
     HELP_REPROMPT: 'You can say things like Hoboken to Thirty Third Street...Now, what can I help you with?',
     STOP_MESSAGE: 'Goodbye!'
