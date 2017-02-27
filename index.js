@@ -18,7 +18,7 @@ const handlers = {
         // If the user either does not reply to the welcome message or says something that is not
         // understood, they will be prompted again with this text.
         this.attributes['repromptSpeech'] = languageString.WELCOME_REPROMPT;
-        this.emit(':ask', this.attributes['speechOutput'], this.attributes['For instructions, say help me'])
+        this.emit(':ask', this.attributes['speechOutput'], this.attributes['repromptSpeech']);
     },
     'PathGuideIntent': function () {
         if (_.isUndefined(this.event.request.intent.slots.Source.value) ||
@@ -66,9 +66,8 @@ const handlers = {
 };
 
 const languageString = {
-    WELCOME_STRING: 'Welcome to the Path Guide',
+    WELCOME_STRING: 'Welcome to the Unoffical Path Guide',
     WELCOME_REPROMPT: 'For help, say help me',
-    SKILL_NAME: 'Path Guide',
     REPEAT_MESSAGE: 'Try saying repeat',
     ERROR_MESSAGE: 'Sorry. The data was not found',
     ITEM_NOT_FOUND_REPROMPT: 'Please try again',
