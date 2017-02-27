@@ -66,7 +66,7 @@ const handlers = {
 };
 
 const languageString = {
-    WELCOME_STRING: 'Welcome to the Unoffical Path Guide',
+    WELCOME_STRING: 'Welcome to the Unoffical Path Guide. For help, say help me',
     WELCOME_REPROMPT: 'For help, say help me',
     REPEAT_MESSAGE: 'Try saying repeat',
     ERROR_MESSAGE: 'Sorry. The data was not found',
